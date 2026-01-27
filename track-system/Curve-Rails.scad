@@ -1,14 +1,14 @@
-//No extra libraries are required and it works under 
-//      OpenSCAD 2014 and OpenSCAD 2015.
 
-//1;1.2;1.5;1.6;1.8;2;2.4;2.5;3;3.6;4;4.5;4.8;5;6;7,2;7.5;8;9;10;12,14.4;15,18;20;22.5;
-//40;56;72;88;104;120;136;152;168;184;200;216;232;248;264;280;296;312;328;344;360
-//Ballast compatible
+//Track Generator
 
 //  R24
 // SegAng = 22.5; Radius = 24;  full = true; diverse = 2000;
 //  R32
 // SegAng = 22.5; Radius = 32;  full = true; diverse = 2000;
+// R40 - Lego Standard
+// R56 - 4DBrix
+// R72 - 4DBrix
+// R88 - 4DBrix
 //  R104
 // SegAng = 11.25; Radius = 104;  full = true; diverse = 2000;
 //  R120
@@ -130,35 +130,34 @@ module CurvedRail(CurveRad,CurveSegAng)
 module barreau() {
 	if (full){
 		skip = 0.3;
-		translate([-16,0,0]){difference(){union(){
-		translate([-8,-8,0]) cube([8+skip,16,3.2], false);
-		translate ([-4,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		translate ([12,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		translate ([20,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		translate ([28,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		translate ([36,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		translate ([52,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		
-		translate([8-skip,-8,0]) cube([32+(2*skip),16,3.2], false);	
+		translate([-16,0,0]){difference(){ union(){
+			translate([-8,-8,0]) cube([8+skip,16,3.2], false);
+			translate ([-4,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate ([12,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate ([20,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate ([28,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate ([36,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate ([52,-4,3]) cylinder(d=4.9,h=2, $fn = 50);
 			
-		translate ([-4,4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		translate ([12,4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		translate ([20,4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		translate ([28,4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		translate ([36,4,3]) cylinder(d=4.9,h=2, $fn = 50);
-		translate ([52,4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate([8-skip,-8,0]) cube([32+(2*skip),16,3.2], false);	
+				
+			translate ([-4,4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate ([12,4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate ([20,4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate ([28,4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate ([36,4,3]) cylinder(d=4.9,h=2, $fn = 50);
+			translate ([52,4,3]) cylinder(d=4.9,h=2, $fn = 50);
+				
+			translate([48-skip,-8,0]) cube([8+skip,16,3.2], false);
+			}
+			translate ([-6.5,-6.5,-1])cube([5,5,3.2], false);
+			translate ([9,-6.5,-1])cube([30,5,3.2], false);
+			translate ([49.5,-6.5,-1])cube([5,5,3.2], false);
 			
-		translate([48-skip,-8,0]) cube([8+skip,16,3.2], false);
-		}
-		translate ([-6.5,-6.5,-1])cube([5,5,3.2], false);
-		translate ([9,-6.5,-1])cube([30,5,3.2], false);
-		translate ([49.5,-6.5,-1])cube([5,5,3.2], false);
-		
-		translate ([-6.5,1.5,-1])cube([5,5,3.2], false);
-		translate ([9,1.5,-1])cube([30,5,3.2], false);
-		translate ([49.5,1.5,-1])cube([5,5,3.2], false);
-		}
-		
+			translate ([-6.5,1.5,-1])cube([5,5,3.2], false);
+			translate ([9,1.5,-1])cube([30,5,3.2], false);
+			translate ([49.5,1.5,-1])cube([5,5,3.2], false);
+			}
 		}
 	} else {
     translate([-9.5,0,0]) cube([35,6,1.5], false);
@@ -166,52 +165,39 @@ module barreau() {
 }
 
 module main(CurveRad,CurveSegAng,barreau){
-translate([-CurveRad*8,0,0])intersection()
-{
-	union()
+	translate([-CurveRad*8,0,0])intersection()
 	{
-        difference()
-        {
-            translate([0,0,3.2])CurvedRail(CurveRad*8,CurveSegAng);
-            rotate([0,0,0])translate([CurveRad*8-0.25-40,0,0])cube([80,4,20]); 
-            rotate([0,0,CurveSegAng])translate([CurveRad*8-0.25+40,0,0])rotate([0,0,180])cube([80,4,20]);
-
-        }
-//Add the end pads
-		difference()
-        {
-		rotate([0,0,0])translate([CurveRad*8-0.25-24,4,0])full_endpoint();
-					if (!full)
-		translate([CurveRad*8-0.25,11,0])linear_extrude(2)text(str("R",CurveRad," L",CurveSegAng),size = 4, font="Helvetica:style=Bold", halign = "center", valign = "center");
-		}
-		rotate([0,0,CurveSegAng])translate([CurveRad*8-0.25+24.5,-4,0])rotate([0,0,180])full_endpoint();
-		echo((CurveSegAng*2*3.14 * CurveRad*8+64)/360);// dlugosc luku
-        //if (CurveSegAng > 10)
+		union()
 		{
-            temp = round(CurveRad*8*CurveSegAng/diverse);
+			difference()
+			{
+				translate([0,0,3.2])CurvedRail(CurveRad*8,CurveSegAng);
+				rotate([0,0,0])translate([CurveRad*8-0.25-40,0,0])cube([80,4,20]); 
+				rotate([0,0,CurveSegAng])translate([CurveRad*8-0.25+40,0,0])rotate([0,0,180])cube([80,4,20]);
 
-            
-            b = CurveSegAng/temp;
-            if (temp > 1)
-            for (i = [1:temp-1]){
-                
-               
-    rotate([0,0,(i*b)])translate([CurveRad*8-0.25-7.75,0,0])barreau();
-
-}
-       } 
+			}
+			//Add the end pads
+			difference()
+			{
+			rotate([0,0,0])translate([CurveRad*8-0.25-24,4,0])full_endpoint();
+						if (!full)
+			translate([CurveRad*8-0.25,11,0])linear_extrude(2)text(str("R",CurveRad," L",CurveSegAng),size = 4, font="Helvetica:style=Bold", halign = "center", valign = "center");
+			}
+			rotate([0,0,CurveSegAng])translate([CurveRad*8-0.25+24.5,-4,0])rotate([0,0,180])full_endpoint();
+			echo((CurveSegAng*2*3.14 * CurveRad*8+64)/360);// dlugosc luku
+			{
+				temp = round(CurveRad*8*CurveSegAng/diverse);
+				
+				b = CurveSegAng/temp;
+				if (temp > 1)
+				for (i = [1:temp-1]){
+					rotate([0,0,(i*b)])translate([CurveRad*8-0.25-7.75,0,0])barreau();
+				}
+		} 
+		}
 	}
-
-}}
+}
 
 translate([0,0,0]) rotate([0,0,0]) 
 
 main(Radius,SegAng);
-// main(24, 22.5);
-// main(32, 22.5);
-// main(56, 11.25);
-// main(72, 11.25);
-// main(104, 11.25);
-// main(120, 11.25);
-//main(136, 11.25);
-//main(152, 5.625);
