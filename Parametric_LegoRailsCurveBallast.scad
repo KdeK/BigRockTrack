@@ -32,9 +32,9 @@ tie_cutout_length_studs = 8; // interpreted as radial width (8 studs)
 brick_inside_length = width1_studs * stud - (2 * wall_width) ;    // 10 studs across the width
 
 // --- Underside grip tubes (anti-studs) ---
-tube_outer_d = 6.5;   // typical LEGO tube OD-ish
-tube_inner_d = 5.0;   // stud OD is ~4.8mm; make this slightly bigger for print fit
-tube_h       = 2.4;   // how far the tube extends downward (mm)
+tube_outer_d = 3.2;   // stud distance between
+tube_inner_d = 2.2;   // 
+tube_h       = 3.2;   // how far the tube extends downward (mm)
 
 stud_arc_len = 4 * stud;   // 4 studs along arc
 stud_row_radial_offset = 0.5 * stud;  // centered on layer 2 surface
@@ -106,15 +106,15 @@ module ballast_segment(radius_studs=24, angle_deg=22.5, num_ties=0) {
         // Subtract a recess at the start (0°)
         rotate([0,0,0])
         translate([r1_in+wall_width, +wall_width, 0])
-            cube([10*stud-(2*wall_width), 1*stud-wall_width, base_h-wall_width], center=false);
+            cube([10*stud-(2*wall_width), 1*stud-(2.5*wall_width), base_h-wall_width], center=false);
 
         // Subtract a recess at the end (angle_deg)
         rotate([0,0,angle_deg])
-        translate([r1_in+wall_width, -(1*stud)-(wall_width/2), 0])
-           cube([10*stud-(2*wall_width), 1*stud-wall_width, base_h-wall_width], center=false);
+        translate([r1_in+wall_width, -(1*stud)+(wall_width), 0])
+           cube([10*stud-(2.5*wall_width), 1*stud-(2*wall_width), base_h-wall_width], center=false);
 
-        translate([r1_in+40, 17, 0])
-        mirror([1,0,0])
+        translate([r1_in+40, 17, 0])  
+        mirror([1,0,0])     
         // position the text under the layer
         linear_extrude(height = plate/2)
             text(str("R", radius_studs, " - ", angle_deg, "°"),
@@ -132,8 +132,8 @@ module ballast_segment(radius_studs=24, angle_deg=22.5, num_ties=0) {
         }
     }
     // After layer 1 geometry is created (and recesses subtracted):
-    //end_grip_tubes_layer1_end(0,        r1_in);
-    //end_grip_tubes_layer1_end(angle_deg, r1_in);
+    end_grip_tubes_layer1(0, r1_in, stud/2-(wall_width/2));
+    end_grip_tubes_layer1(angle_deg, r1_in, -stud/2+(wall_width/2));
 
     // --- Layer 2: minus gaps, rail cutouts, end notches, tie cut-outs ---
     translate([0,0, base_h])
@@ -142,26 +142,17 @@ module ballast_segment(radius_studs=24, angle_deg=22.5, num_ties=0) {
         linear_extrude(height = raised_h)
             annular_sector(r2_in, r2_out, 0, angle_deg);
 
-        // central gap
-        //linear_extrude(height = raised_h)
-        //    annular_sector(r_gap_in, r_gap_out, 0, angle_deg);
-
         // rail cutouts
         linear_extrude(height = raised_h)
             annular_sector(rail_cutout_outer_in, rail_cutout_outer_out, 0, angle_deg);
         linear_extrude(height = raised_h)
             annular_sector(rail_cutout_inner_in, rail_cutout_inner_out, 0, angle_deg);
 
-        // end notches - old
-        /* linear_extrude(height = raised_h)
-            annular_sector(r2_in, r2_out, 0, notch_angle_deg);
+        // end notches
         linear_extrude(height = raised_h)
-            annular_sector(r2_in, r2_out, angle_deg - notch_angle_deg, angle_deg);
-        */
+            annular_sector(r2_in, r2_out, -end_clearance_deg, notch_angle_deg + end_clearance_deg);
         linear_extrude(height = raised_h)
-            annular_sector(r2_in, r2_out, 0, notch_angle_deg + end_clearance_deg);
-        linear_extrude(height = raised_h)
-            annular_sector(r2_in, r2_out, angle_deg - (notch_angle_deg + end_clearance_deg), angle_deg);
+            annular_sector(r2_in, r2_out, angle_deg - notch_angle_deg - end_clearance_deg, angle_deg + end_clearance_deg);
         // tie cut-outs oriented across the width:
         // long side (8 studs) along radial direction, short side (2 studs) along arc direction
         for (a_i = tie_angles) {
@@ -274,25 +265,28 @@ module stud_rows_between_ties(bounds, r_center, z_height, tie_half_deg) {
 }
 
 module anti_stud_tube() {
-    // hollow tube extending DOWN from z=0
     difference() {
-        translate([0,0,-tube_h]) cylinder(d=tube_outer_d, h=tube_h, $fn=48);
-        translate([0,0,-tube_h]) cylinder(d=tube_inner_d, h=tube_h, $fn=48);
+        translate([0,0,(tube_h-2.0)])
+            cylinder(d=tube_outer_d, h=tube_h, $fn=48);
+        translate([0,0,-tube_h])
+            cylinder(d=tube_inner_d, h=tube_h, $fn=48);
     }
 }
 
+
 // Place a row of 10 anti-stud tubes inside the layer-1 end gap (1x10)
-module end_grip_tubes_layer1_end(angle_deg, r_base, y_len_studs=10) {
-    rotate([0,0,angle_deg]) {
-        // Put the tube row centered in the 1x10 recess.
-        // r_base should be the radial location of the recess region.
-        for (j = [0 : y_len_studs-1]) {
-            y = (j - (y_len_studs-1)/2) * stud;   // -4.5..+4.5 studs
-            translate([r_base + 0.5*stud, y, 0])  // 0.5 stud in from recess edge
-                anti_stud_tube();
-        }
+module end_grip_tubes_layer1(a_deg, r1_in, y_offset) {
+  rotate([0,0,a_deg]) {
+    // 9 tubes between 10 stud positions along the 10-stud radial recess
+    for (i = [0:8]) {
+      x = r1_in + (i + 1) * stud;   // between studs: 1..9 studs from r1_in
+      y = y_offset;  // centered in the 1-stud tangential thickness
+      translate([x, y, -1.2])
+        anti_stud_tube();
     }
+  }
 }
+
 
 // Draw an annular sector (helper)
 module annular_sector(r_in, r_out, a0_deg, a1_deg, fn=180) {
@@ -307,10 +301,10 @@ module annular_sector(r_in, r_out, a0_deg, a1_deg, fn=180) {
 
 // Example usage:
 // ballast_segment(radius_studs=24, angle_deg=22.5, num_ties=1);
- ballast_segment(radius_studs=32, angle_deg=22.5, num_ties=2);
+// ballast_segment(radius_studs=32, angle_deg=22.5, num_ties=2);
 // ballast_segment(radius_studs=40, angle_deg=22.5, num_ties=3);
-//ballast_segment(radius_studs=56, angle_deg=22.5, num_ties=4);
+// ballast_segment(radius_studs=56, angle_deg=22.5, num_ties=4);
 // ballast_segment(radius_studs=102, angle_deg=11.25, num_ties=4);
-//ballast_segment(radius_studs=120, angle_deg=11.25, num_ties=4);
-//ballast_segment(radius_studs=136, angle_deg=5.625, num_ties=2);
+ ballast_segment(radius_studs=120, angle_deg=11.25, num_ties=4);
+// ballast_segment(radius_studs=136, angle_deg=5.625, num_ties=2);
 // ballast_segment(radius_studs=152, angle_deg=5.625, num_ties=2);

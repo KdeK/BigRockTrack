@@ -3,11 +3,20 @@
 
 //1;1.2;1.5;1.6;1.8;2;2.4;2.5;3;3.6;4;4.5;4.8;5;6;7,2;7.5;8;9;10;12,14.4;15,18;20;22.5;
 //40;56;72;88;104;120;136;152;168;184;200;216;232;248;264;280;296;312;328;344;360
+//Ballast compatible
 
-SegAng = 20;  
-Radius = 56;  full = false;
-diverse = 4000;
-
+//  R24
+// SegAng = 22.5; Radius = 24;  full = true; diverse = 2000;
+//  R32
+// SegAng = 22.5; Radius = 32;  full = true; diverse = 2000;
+//  R104
+// SegAng = 11.25; Radius = 104;  full = true; diverse = 2000;
+//  R120
+SegAng = 11.25; Radius = 120;  full = true; diverse = 2000;
+//  R136
+//SegAng = 5.625; Radius = 136;  full = true; diverse = 2000;
+//  R152
+//SegAng = 5.625; Radius = 152;  full = true; diverse = 2000;
 
 
 //Rail profile
@@ -195,19 +204,14 @@ translate([-CurveRad*8,0,0])intersection()
 
 }}
 
-//%translate([-384,0,0]) rotate([0,0,0]) main(24,45);//R24 L45
-//#%translate([-320,0,0]) rotate([0,0,0]) main(32,SegAng);
-//translate([-256,0,0]) rotate([0,0,0]) main(40,22.5);//R40 L22.5
-//%translate([-256,0,0]) rotate([0,0,0]) main(40,36.87);//R40 for switch
-//#%translate([-192,0,0]) rotate([0,0,0]) main(48,SegAng);
-//translate([-128,0,0]) rotate([0,0,0]) main(56,18);//R56 L18
-//%translate([-64,32*8,0]) rotate([0,0,21])mirror([1,0,0]) main(56,21);//R56 for switch
-//translate([-128,0,0]) mirror([0,0,0]) main(248-16,8);
-translate([0,0,0]) rotate([0,0,0]) main(Radius,SegAng);//R72 L15
-//#%translate([64,0,0]) rotate([0,0,0]) main(80,SegAng);
-//%translate([128,0,0]) rotate([0,0,0]) main(88,11.25);//R88 L11.25
-//#%translate([192,0,0]) rotate([0,0,0]) main(96,SegAng);
-//%translate([256,0,0]) rotate([0,0,0]) main(104,11.25);//R104 L11.25
-//#%translate([320,0,0]) rotate([0,0,0]) main(112,SegAng);
-//%translate([384,0,0]) rotate([0,0,0]) main(120,11.25);//R120 L11.25
+translate([0,0,0]) rotate([0,0,0]) 
 
+main(Radius,SegAng);
+// main(24, 22.5);
+// main(32, 22.5);
+// main(56, 11.25);
+// main(72, 11.25);
+// main(104, 11.25);
+// main(120, 11.25);
+//main(136, 11.25);
+//main(152, 5.625);

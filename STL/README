@@ -1,0 +1,121 @@
+# LEGO-Compatible Ballast & Track System
+
+This repository contains **LEGO-compatible ballast and track files** designed for 3D printing and use with custom or third-party LEGO-scale track systems.
+
+The files are intended for **personal and club use**, allowing builders to print, modify, and adapt the parts to suit their layouts while maintaining LEGO geometry and spacing.
+
+---
+
+## 📦 What’s Included
+
+### Ballast Files
+
+* Straight and curved ballast plates
+* Designed to sit **under or around compatible track**
+* LEGO-compatible stud geometry for alignment and stability
+* Optimized for modular layouts and large-radius curves
+
+### Track Files
+
+* Track sections sized to standard LEGO train geometry
+* Curve radii and angles match the corresponding ballast pieces
+* Intended to sit **flush into the ballast** (no clips or fasteners required)
+
+> Ballast and track are designed as **separate components** so you can mix, match, or replace either without reprinting everything.
+
+---
+
+## 🧰 Printing Recommendations
+
+### Filament
+
+* **PLA or PLA+** recommended for ease of printing
+* Dark grey, light grey, or ballast-style colors work best visually
+* PETG is acceptable if your layout is exposed to heat, but expect slightly reduced detail
+
+### Print Settings (Suggested)
+
+* Layer height: **0.2 mm**
+* Infill: **15–20%** (grid or gyroid)
+* Walls: **3 perimeters**
+* Top / Bottom layers: **4–5**
+* No supports required
+
+> Ballast pieces are designed to print **flat on the bed** for maximum strength and dimensional accuracy.
+
+---
+
+## 🧩 Assembly & Use
+
+1. **Print the ballast pieces** needed for your layout
+2. **Lay ballast on a flat surface** or baseplate
+3. **Place track sections into the recessed areas** of the ballast
+4. Align using LEGO studs, tiles, or surrounding scenery as desired
+
+The track is held in place by:
+
+* Gravity
+* Tight tolerances
+* Surrounding ballast geometry
+
+No glue or permanent attachment is required unless you want a fixed layout.
+
+---
+
+## 🔧 Modifying the Files
+
+You are encouraged to:
+
+* Adjust radii or angles
+* Add drainage, texture, or cosmetic details
+* Integrate with baseplates, MILS, or custom supports
+* Remix for club-specific standards
+
+If you publish remixes, please:
+
+* Credit the original source
+* Clearly note what you changed
+
+---
+
+## 📏 Compatibility Notes
+
+* Designed around **LEGO train geometry**
+* Compatible with LEGO-scale rolling stock
+* Intended to work alongside third-party track systems of matching radius
+* Always test-fit with a short print before committing to a full layout
+
+---
+
+## 📜 License
+
+This project is licensed under **Creative Commons Attribution–NonCommercial 4.0 (CC BY-NC 4.0)**.
+
+✔ You may:
+
+* Print for personal use
+* Modify and remix
+* Share with others
+
+✖ You may **not**:
+
+* Sell the files
+* Sell printed parts
+* Use commercially without permission
+
+See the `LICENSE` file for full details.
+
+---
+
+## 🤝 Contributing & Feedback
+
+Suggestions, improvements, and tested tweaks are welcome.
+If you’ve:
+
+* Optimized print settings
+* Built large layouts
+* Adapted these for club use
+
+…feel free to share your results or improvements.
+
+Happy building 🚆🧱
