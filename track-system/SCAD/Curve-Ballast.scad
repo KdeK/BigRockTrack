@@ -42,7 +42,7 @@ stud_row_radial_offset = 0.5 * stud;  // centered on layer 2 surface
 end_clearance_mm = 1.0;  // <-- tweak (try 0.6–1.2)
 
 
-module ballast_segment(radius_studs=24, angle_deg=22.5, num_ties=0) {
+module ballast_segment(radius_studs=24, angle_deg=22.5, num_ties=0,adjust_rail_thickness=0) {
     base_h   = plate;
     raised_h = plate;
     r_center = radius_studs * stud;
@@ -58,10 +58,10 @@ module ballast_segment(radius_studs=24, angle_deg=22.5, num_ties=0) {
     r_gap_out = r_center + (tie_gap_studs/2) * stud;
 
     // Rail cutouts on layer 2
-    rail_cutout_outer_in  = r2_out - 2 * stud;
+    rail_cutout_outer_in  = r2_out - 2 * stud-(adjust_rail_thickness/2);
     rail_cutout_outer_out = r2_out - 1 * stud;
     rail_cutout_inner_in  = r2_out - 7 * stud;
-    rail_cutout_inner_out = r2_out - 6 * stud;
+    rail_cutout_inner_out = r2_out - 6 * stud+(adjust_rail_thickness/2);
 
     end_clearance_deg = (end_clearance_mm / r2_in) * 180 / PI;
     // End notch size
@@ -171,9 +171,11 @@ module ballast_segment(radius_studs=24, angle_deg=22.5, num_ties=0) {
     place_stud_row_with_skips(r1_out - 0.5 * stud, 0, angle_deg, base_h, []);
 
     // --- Stud rows on layer 2 (skip end notches + tie regions) ---
-    place_stud_row_with_skips(r2_in + 0.5 * stud, 0, angle_deg, base_h + raised_h, skip_regions);
-
-    place_stud_row_with_skips(r2_out - 0.5 * stud, 0, angle_deg, base_h + raised_h, skip_regions);
+    
+    
+    //Old
+    //place_stud_row_with_skips(r2_in + 0.5 * stud, 0, angle_deg, base_h + raised_h, skip_regions);
+    //place_stud_row_with_skips(r2_out - 0.5 * stud, 0, angle_deg, base_h + raised_h, skip_regions);
 
     tie_half_deg = ((2 * stud) / 2) / r_center * 180 / PI;  // half of 2-stud arc thickness
 
@@ -253,6 +255,12 @@ module stud_rows_between_ties(bounds, r_center, z_height, tie_half_deg) {
                     a = start_angle + j * row_pitch_deg;
 
                     // 4 studs across width (adjust this if you want different radial placement)
+                    rotate([0,0,a])
+                        translate([r_center + -3.5 * stud, 0, z_height])
+                            cylinder(d=stud_d, h=stud_h, $fn=24);
+                    rotate([0,0,a])
+                        translate([r_center + 3.5 * stud, 0, z_height])
+                            cylinder(d=stud_d, h=stud_h, $fn=24);
                     for (k = [-1.5 : 1 : 1.5]) {
                         rotate([0,0,a])
                             translate([r_center + k * stud, 0, z_height])
@@ -304,7 +312,17 @@ module annular_sector(r_in, r_out, a0_deg, a1_deg, fn=180) {
 // ballast_segment(radius_studs=32, angle_deg=22.5, num_ties=2);
 // ballast_segment(radius_studs=40, angle_deg=22.5, num_ties=3);
 // ballast_segment(radius_studs=56, angle_deg=22.5, num_ties=4);
-// ballast_segment(radius_studs=102, angle_deg=11.25, num_ties=4);
- ballast_segment(radius_studs=120, angle_deg=11.25, num_ties=4);
+
+//R104
+//ballast_segment(radius_studs=104, angle_deg=11.25, num_ties=4);
+// AliExpress Injected Rails
+//ballast_segment(radius_studs=104, angle_deg=11.25, num_ties=4, adjust_rail_thickness=2);
+
+// ballast_segment(radius_studs=120, angle_deg=11.25, num_ties=4);
 // ballast_segment(radius_studs=136, angle_deg=5.625, num_ties=2);
-// ballast_segment(radius_studs=152, angle_deg=5.625, num_ties=2);
+
+//R152
+//ballast_segment(radius_studs=152, angle_deg=5.625, num_ties=2);
+//AliExpress Injected Rails
+ballast_segment(radius_studs=152, angle_deg=5.625, num_ties=3, adjust_rail_thickness=2);
+
