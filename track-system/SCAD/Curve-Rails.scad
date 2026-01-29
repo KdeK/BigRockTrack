@@ -31,7 +31,7 @@ SegAng = 11.25; Radius = 120;  full = true; diverse = 2000;
 //  R136
 //SegAng = 5.625; Radius = 136;  full = true; diverse = 2000;
 //  R152
-//SegAng = 5.625; Radius = 152;  full = true; diverse = 2000;
+//SegAng = 5.625; Radius = 152;  full = true; diverse = 1800;
 
 
 // RailProfile: Defines the cross-sectional profile of a single rail
