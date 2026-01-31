@@ -113,6 +113,25 @@ module ballast_segment(radius_studs=24, angle_deg=22.5, num_ties=0,adjust_rail_t
         translate([r1_in+wall_width, -(1*stud)+(wall_width), 0])
            cube([10*stud-(2.5*wall_width), 1*stud-(2*wall_width), base_h-wall_width], center=false);
 
+        // Subtract the edge recess
+        // --- Inside arc bottom cutout ---
+        linear_extrude(height = base_h - wall_width)
+            annular_sector(
+                r1_in + wall_width, 
+                r1_in + 1*stud, 
+                notch_angle_deg, 
+                angle_deg - notch_angle_deg
+            );
+
+        // --- Outside arc bottom cutout ---
+        linear_extrude(height = base_h - wall_width)
+            annular_sector(
+                r1_out + wall_width - 1*stud, 
+                r1_out - wall_width, 
+                notch_angle_deg, 
+                angle_deg - notch_angle_deg
+            );
+
         translate([r1_in+40, 17, 0])  
         mirror([1,0,0])     
         // position the text under the layer
@@ -322,7 +341,7 @@ module annular_sector(r_in, r_out, a0_deg, a1_deg, fn=180) {
 // ballast_segment(radius_studs=136, angle_deg=5.625, num_ties=2);
 
 //R152
-//ballast_segment(radius_studs=152, angle_deg=5.625, num_ties=2);
+//ballast_segment(radius_studs=152, angle_deg=5.625, num_ties=3);
 //AliExpress Injected Rails
 ballast_segment(radius_studs=152, angle_deg=5.625, num_ties=3, adjust_rail_thickness=2);
 
